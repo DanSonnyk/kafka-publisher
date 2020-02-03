@@ -1,0 +1,33 @@
+server.port: 8081
+
+spring:
+    data:
+        mongodb:
+            uri: mongodb://localhost:27017
+#            uri: mongodb://payment_rw:PhwEdxJfrsXQ0H@az-us-hmg-free-mongodb-common-01.netshoes.io:27017,az-us-hmg-free-mongodb-common-02.netshoes.io:27017,az-us-hmg-free-mongodb-common-03.netshoes.io:27017/dbPayment?authMechanism=SCRAM-SHA-1&authSource=dbPayment&replicaSet=freedom
+    rabbitmq:
+        addresses: localhost:5672
+        username: guest
+        password: guest
+    #    virtualHost: freedom
+    mvc.async.request-timeout: 10000
+    kafka:
+#        bootstrap-servers: tmb-dev-free-kf-order-01.ns2online.com.br:9092
+        bootstrap-servers: localhost:9092
+        consumer:
+            bootstrap-servers: ${spring.kafka.bootstrap-servers}
+        producer:
+            bootstrap-servers: ${spring.kafka.bootstrap-servers}
+            value-serializer: org.apache.kafka.common.serialization.StringSerializer
+            key-serializer: org.apache.kafka.common.serialization.StringSerializer
+            retries: 10
+
+kafka:
+    kafkapublisher:
+        pre-authorization-status:
+            bootstrapServers: ${spring.kafka.bootstrap-servers}
+            groupId: kafkapublisher
+            consumer:
+                topic: pre-authorization-status-request-topic
+            producer:
+                topic: pre-authorization-result-topic
